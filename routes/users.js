@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-const Message = require('../models/Message');
+const User = require('../models/user')
+const Message = require('../models/message');
 
 // Auth middleware
 const auth = async (req, res, next) => {
