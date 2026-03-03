@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archer Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Auth Screen -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-box">
+            <div class="logo">🏹 ARCHER</div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form">
+                <h2>Welcome Back</h2>
+                <div class="error" id="loginError"></div>
+                <input type="email" id="loginEmail" placeholder="Email" class="input">
+                <input type="password" id="loginPassword" placeholder="Password" class="input">
+                <button onclick="login()" class="btn">Sign In</button>
+                <p class="link forgot-link" onclick="showForgotPassword()">Forgot password?</p>
+                <p class="link" onclick="showRegister()">Don't have an account? <span>Sign up</span></p>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div id="forgotPasswordForm" class="auth-form" style="display:none;">
+                <h2>Reset Password</h2>
+                <div class="error" id="forgotError"></div>
+                <div class="success" id="forgotSuccess"></div>
+                <p style="color: #6b9bd1; font-size: 14px; margin-bottom: 20px;">Enter your email and we'll send you a reset code</p>
+                <input type="email" id="forgotEmail" placeholder="Enter your email" class="input">
+                <button onclick="requestPasswordReset()" class="btn">Send Reset Code</button>
+                <p class="link" onclick="showLogin()">Back to <span>Sign in</span></p>
+            </div>
+            
+            <!-- Reset Password Form -->
+            <div id="resetPasswordForm" class="auth-form" style="display:none;">
+                <h2>Enter New Password</h2>
+                <div class="error" id="resetError"></div>
+                <div class="success" id="resetSuccess"></div>
+                <input type="text" id="resetCode" placeholder="Enter reset code" class="input">
+                <input type="password" id="newPassword" placeholder="New password (min 6 chars)" class="input">
+                <input type="password" id="confirmPassword" placeholder="Confirm new password" class="input">
+                <button onclick="resetPassword()" class="btn">Reset Password</button>
+                <p class="link" onclick="showLogin()">Back to <span>Sign in</span></p>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form" style="display:none;">
+                <h2>Create Account</h2>
+                <div class="error" id="registerError"></div>
+                <div class="success" id="registerSuccess"></div>
+                <input type="text" id="registerUsername" placeholder="Username" class="input">
+                <input type="email" id="registerEmail" placeholder="Email" class="input">
+                <input type="password" id="registerPassword" placeholder="Password (min 6 chars)" class="input">
+                <button onclick="register()" class="btn">Create Account</button>
+                <p class="link" onclick="showLogin()">Have an account? <span>Sign in</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="appContainer" style="display:none;">
+        <div class="status-badge" id="statusBadge">
+            <span class="dot" id="statusDot"></span>
+            <span id="statusText">Connected</span>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar"></div>
+                    <div>
+                        <div class="username" id="username"></div>
+                        <div class="user-status-text">Online</div>
+                    </div>
+                </div>
+                <button onclick="openContactModal()" class="icon-btn" title="Add Contact">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+
+            <div class="contacts-list" id="contactsList">
+                <div class="no-contacts">No contacts yet. Click + to add contacts!</div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="empty-chat" id="emptyChat">
+                <div class="empty-icon">💬</div>
+                <p>Select a contact to start chatting</p>
+            </div>
+
+            <div class="chat-container" id="chatContainer" style="display:none;">
+                <div class="chat-header">
+                    <button class="back-button" onclick="backToContacts()" style="display:none;">←</button>
+                    <div class="avatar small" id="chatAvatar"></div>
+                    <div>
+                        <div class="chat-name" id="chatName"></div>
+                        <div class="chat-status" id="chatStatus">Offline</div>
+                    </div>
+                </div>
+
+                <div class="messages" id="messages"></div>
+                
+                <div class="typing" id="typingIndicator" style="display:none;">
+                    <span></span><span></span><span></span>
+                </div>
+
+                <div class="input-area">
+                    <button class="action-btn" onclick="toggleEmoji()" title="Emoji">😊</button>
+                    <button class="action-btn" onclick="openCamera()" title="Camera">📷</button>
+                    <button class="action-btn" onclick="document.getElementById('fileInput').click()" title="Attach">📎</button>
+                    <input 
+                        type="text" 
+                        id="messageInput" 
+                        placeholder="Type a message..."
+                        class="input"
+                        onkeypress="if(event.key==='Enter') sendMessage()"
+                    >
+                    <button onclick="sendMessage()" class="send-btn">➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of App Container -->
+
+    <!-- Modals - Outside app container so they work everywhere! -->
+    <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.txt">
+
+    <div class="emoji-picker" id="emojiPicker" style="display: none;"></div>
+
+    <div class="camera-modal" id="cameraModal" style="display: none;">
+        <video id="cameraVideo" autoplay></video>
+        <canvas id="cameraCanvas" style="display: none;"></canvas>
+        <div class="camera-controls">
+            <button onclick="capturePhoto()" class="camera-btn">📸 Capture</button>
+            <button onclick="closeCamera()" class="camera-btn cancel">✕ Cancel</button>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contactModal" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Contacts</h2>
+                <button onclick="closeContactModal()" class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <label class="modal-label">Your Invite Code</label>
+                    <div class="invite-display">
+                        <input type="text" id="myInviteCodeDisplay" readonly class="invite-input">
+                        <button onclick="copyInviteCode()" class="copy-code-btn">Copy</button>
+                    </div>
+                    <p class="modal-hint">Share this code with others to let them add you</p>
+                </div>
+                
+                <div class="modal-divider">OR</div>
+                
+                <div class="modal-section">
+                    <label class="modal-label">Enter Someone's Invite Code</label>
+                    <input type="text" id="addContactInput" placeholder="Enter invite code" class="modal-input">
+                    <button onclick="addContact()" class="modal-btn">Add Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Contact Modal -->
+    <div class="modal-overlay" id="deleteContactModal" style="display: none;">
+        <div class="modal-box small">
+            <div class="modal-header">
+                <h2>Delete Contact</h2>
+                <button onclick="closeDeleteModal()" class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="delete-warning">Are you sure you want to delete <strong id="deleteContactName"></strong>?</p>
+                <p class="modal-hint">All messages will be deleted and cannot be recovered.</p>
+                <div class="modal-actions">
+                    <button onclick="closeDeleteModal()" class="modal-btn secondary">Cancel</button>
+                    <button onclick="confirmDeleteContact()" class="modal-btn danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal -->
+    <div class="modal-overlay" id="imageViewerModal" style="display: none;" onclick="if(event.target === this) closeImageViewer()">
+        <button onclick="closeImageViewer()" class="image-viewer-close">✕</button>
+        <img id="viewerImage" class="viewer-image" src="" alt="Image">
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
