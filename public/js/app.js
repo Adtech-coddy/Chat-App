@@ -64,6 +64,7 @@ async function login() {
     }
 }
 
+
 async function register() {
     const username = document.getElementById('registerUsername').value.trim();
     const email = document.getElementById('registerEmail').value.trim();
@@ -85,7 +86,7 @@ async function register() {
     }
     
 try {
-    const res = await fetch("/api/auth/login", {
+    const res = await fetch("/api/auth/register", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
