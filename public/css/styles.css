@@ -45,38 +45,386 @@ body {
     margin-bottom: 20px;
     font-size: 24px;
 }
-
-.input-area{
-    display:flex;
-    align-items:flex-end;
-    gap:10px;
-    padding:10px;
+/* Input area wrapper */
+.input-area {
+    padding: 12px;
+    background: #0d1b2e;
+    border-top: 2px solid #1a2f4a;
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    flex-wrap: nowrap;
 }
 
-.input{
-    width:100%;
-    padding:14px;
-    background:#152238;
-    border:2px solid #1a3a5a;
-    border-radius:10px;
-    color:white;
-    font-size:15px;
-    margin-top: 1rem;
-    outline:none;
-    resize:none;
-    max-height:140px;
-    overflow-y:auto;
-    box-sizing:border-box;
+/* Action button groups */
+.input-actions-left,
+.input-actions-right {
+    display: flex;
+    gap: 6px;
+    align-items: center;
 }
 
-.input:focus {
+/* Message input field */
+.message-input-field {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    background: #152238;
+    border: 2px solid #1a3a5a;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    margin-top: 0 !important;
+}
+
+.message-input-field:focus {
     border-color: #2a5a8a;
     box-shadow: 0 0 0 3px rgba(42, 90, 138, 0.1);
 }
 
-.input::placeholder {
+/* Action buttons - compact on mobile */
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.action-btn:hover {
+    background: rgba(26, 58, 90, 0.5);
+    transform: scale(1.1);
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+/* Voice button special styling */
+.voice-btn {
+    background: linear-gradient(135deg, #1a4a7a, #2a5a8a);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.voice-btn:active {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: scale(1.1);
+}
+
+/* Send button */
+.send-btn {
+    background: linear-gradient(135deg, #1a4a7a, #2a5a8a);
+    border: none;
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.send-btn:hover {
+    transform: scale(1.1);
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+.voice-recording-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 22, 40, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.voice-recording-content {
+    text-align: center;
+    color: white;
+}
+
+.recording-animation {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+}
+
+.recording-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(220, 38, 38, 0.3);
+    animation: pulse-ring 1.5s ease-out infinite;
+}
+
+
+/* Voice message player */
+.message-voice {
+    margin-bottom: 5px;
+}
+
+.voice-player {
+    width: 100%;
+    max-width: 280px;
+    height: 40px;
+    border-radius: 20px;
+    outline: none;
+}
+
+.voice-player::-webkit-media-controls-panel {
+    background: rgba(26, 58, 90, 0.8);
+    border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .voice-player {
+        max-width: 100%;
+        height: 36px;
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.recording-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.recording-time {
+    font-size: 36px;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+.recording-hint {
+    font-size: 14px;
     color: #6b9bd1;
-    opacity: 0.5;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .recording-animation {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .recording-pulse {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .recording-icon {
+        font-size: 50px;
+    }
+    
+    .recording-time {
+        font-size: 28px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE CONTACT MODAL
+   ============================================ */
+
+.invite-display-responsive {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.invite-input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    background: #152238;
+    border: 2px solid #1a3a5a;
+    border-radius: 10px;
+    color: #6b9bd1;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.copy-code-btn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #1a4a7a, #2a5a8a);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.copy-code-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(26, 74, 122, 0.4);
+}
+
+/* Mobile responsive contact modal */
+@media (max-width: 768px) {
+    .modal-box {
+        width: 95%;
+        max-height: 85vh;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .invite-display-responsive {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .invite-input {
+        font-size: 14px;
+        letter-spacing: 1px;
+        padding: 10px 12px;
+    }
+    
+    .copy-code-btn {
+        width: 100%;
+        padding: 12px;
+    }
+    
+    .modal-input {
+        font-size: 14px;
+    }
+    
+    .modal-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-header h2 {
+        font-size: 18px;
+    }
+    
+    .invite-input {
+        font-size: 13px;
+    }
+}
+
+
+/* ============================================
+   MOBILE RESPONSIVE INPUT - HIDE EMOJI
+   ============================================ */
+
+@media (max-width: 768px) {
+    .input-area {
+        padding: 10px;
+        gap: 6px;
+    }
+    
+    /* Hide emoji button on mobile to save space */
+    .emoji-btn {
+        display: none !important;
+    }
+    
+    /* Smaller action buttons on mobile */
+    .action-btn {
+        font-size: 18px;
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+    
+    /* Smaller send button on mobile */
+    .send-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    /* Voice button on mobile */
+    .voice-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    /* Input takes more space */
+    .message-input-field {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .input-area {
+        padding: 8px;
+        gap: 4px;
+    }
+    
+    .action-btn {
+        font-size: 16px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .send-btn,
+    .voice-btn {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 .btn {

@@ -450,10 +450,25 @@ function renderMessages() {
             `;
         }
         
+        if (msg.fileType && msg.fileType.startsWith('audio/')) {
+    div.innerHTML = `
+        <div class="message-voice">
+            <audio controls class="voice-player">
+                <source src="${msg.fileData}" type="${msg.fileType}">
+            </audio>
+        </div>
+        <div class="message-meta">
+            <span class="message-time">${time}</span>
+            ${isSent ? getStatusIcon(msg.status || 'sent') : ''}
+        </div>
+    `;
+}
+
         messagesDiv.appendChild(div);
     });
     
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
 }
 
 function getStatusIcon(status) {
@@ -1202,4 +1217,95 @@ async function resetPassword() {
     } catch (error) {
         showError(errorDiv, error.message);
     }
+}
+
+
+
+let mediaRecorder;
+let audioChunks = [];
+let recordingStartTime;
+let recordingTimer;
+
+function startVoiceRecording(event) {
+    event.preventDefault();
+    
+    if (!selectedContact) {
+        alert('Please select a contact first');
+        return;
+    }
+    
+    // Request microphone access
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+            
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                
+                reader.onloadend = () => {
+                    const base64Audio = reader.result;
+                    
+                    // Send voice message
+                    if (socket && audioBlob.size > 0) {
+                        socket.emit('send_message', {
+                            receiverId: selectedContact._id,
+                            text: '',
+                            file: {
+                                data: base64Audio,
+                                name: 'voice_message.webm',
+                                type: 'audio/webm',
+                                size: audioBlob.size
+                            }
+                        });
+                    }
+                };
+                
+                reader.readAsDataURL(audioBlob);
+                
+                // Stop all tracks
+                stream.getTracks().forEach(track => track.stop());
+            };
+            
+            // Start recording
+            mediaRecorder.start();
+            recordingStartTime = Date.now();
+            
+            // Show recording overlay
+            document.getElementById('voiceRecordingOverlay').style.display = 'flex';
+            
+            // Start timer
+            updateRecordingTime();
+            recordingTimer = setInterval(updateRecordingTime, 100);
+            
+        })
+        .catch(error => {
+            console.error('Microphone access denied:', error);
+            alert('Please allow microphone access to record voice messages');
+        });
+}
+
+function stopVoiceRecording() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        clearInterval(recordingTimer);
+        document.getElementById('voiceRecordingOverlay').style.display = 'none';
+    }
+}
+
+function updateRecordingTime() {
+    if (!recordingStartTime) return;
+    
+    const elapsed = Date.now() - recordingStartTime;
+    const seconds = Math.floor(elapsed / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    
+    const timeString = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    document.getElementById('recordingTime').textContent = timeString;
 }
