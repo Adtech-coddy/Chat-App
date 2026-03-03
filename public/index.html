@@ -114,42 +114,22 @@
                     <span></span><span></span><span></span>
                 </div>
 
-
                 <div class="input-area">
-    <!-- Left side actions -->
-                <div class="input-actions-left">
-                    <button class="action-btn emoji-btn" onclick="toggleEmoji()" title="Emoji">😊</button>
-                </div>
-                
-                                <!-- Voice Recording Indicator -->
-                <div class="voice-recording-overlay" id="voiceRecordingOverlay" style="display: none;">
-                    <div class="voice-recording-content">
-                        <div class="recording-animation">
-                            <div class="recording-pulse"></div>
-                            <div class="recording-icon">🎤</div>
-                        </div>
-                        <div class="recording-time" id="recordingTime">0:00</div>
-                        <div class="recording-hint">Release to send • Slide to cancel</div>
-                    </div>
-                </div>
-
-                <!-- Message input -->
-                <input 
-                    type="text" 
-                    id="messageInput" 
-                    placeholder="Type a message..."
-                    class="input message-input-field"
-                    onkeypress="if(event.key==='Enter') sendMessage()"
-                >
-                
-                <!-- Right side actions -->
-                <div class="input-actions-right">
+                    <button class="action-btn" onclick="toggleEmoji()" title="Emoji">😊</button>
                     <button class="action-btn" onclick="openCamera()" title="Camera">📷</button>
                     <button class="action-btn" onclick="document.getElementById('fileInput').click()" title="Attach">📎</button>
-                    <button class="action-btn voice-btn" onmousedown="startVoiceRecording(event)" onmouseup="stopVoiceRecording()" ontouchstart="startVoiceRecording(event)" ontouchend="stopVoiceRecording()" title="Hold to record voice">🎤</button>
+                    <input 
+                        type="text" 
+                        id="messageInput" 
+                        placeholder="Type a message..."
+                        class="input"
+                        onkeypress="if(event.key==='Enter') sendMessage()"
+                    >
                     <button onclick="sendMessage()" class="send-btn">➤</button>
                 </div>
             </div>
+        </div>
+    </div>
     <!-- End of App Container -->
 
     <!-- Modals - Outside app container so they work everywhere! -->
@@ -176,7 +156,7 @@
             <div class="modal-body">
                 <div class="modal-section">
                     <label class="modal-label">Your Invite Code</label>
-                   <div class="invite-display-responsive">
+                    <div class="invite-display">
                         <input type="text" id="myInviteCodeDisplay" readonly class="invite-input">
                         <button onclick="copyInviteCode()" class="copy-code-btn">Copy</button>
                     </div>
