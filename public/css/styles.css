@@ -70,12 +70,6 @@ body {
 }
 
 
-@media(max-width:768px) {
-    .input{
-         margin-top: -15rem;
-    }
-}
-
 .input:focus {
     border-color: #2a5a8a;
     box-shadow: 0 0 0 3px rgba(42, 90, 138, 0.1);
@@ -171,7 +165,7 @@ body {
 @media (max-width: 768px) { 
     .status-badge { 
         top: auto; 
-        bottom: 570px; 
+        bottom: 800px; 
         right: 15px; 
         font-size: 11px; 
         padding: 6px 12px; } }
@@ -637,6 +631,13 @@ body {
     flex-direction: column;
     background: #0a1628;
     overflow: hidden;
+}
+@media(max-width: 768px) {
+     .chat-area {
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 /* Back Button for Mobile */
