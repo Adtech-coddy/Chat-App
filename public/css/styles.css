@@ -69,6 +69,13 @@ body {
     box-sizing:border-box;
 }
 
+
+@media(max-width:768px) {
+    .input{
+         margin-top: -15rem;
+    }
+}
+
 .input:focus {
     border-color: #2a5a8a;
     box-shadow: 0 0 0 3px rgba(42, 90, 138, 0.1);
@@ -148,7 +155,7 @@ body {
 
 .status-badge {
     position: fixed;
-    top: 15px;
+    top: 2px;
     right: 15px;
     background: rgba(13, 27, 46, 0.95);
     padding: 8px 15px;
@@ -161,15 +168,13 @@ body {
     gap: 8px;
 }
 
-@media (max-width: 768px) {
-    .status-badge {
-        top: auto;
-        bottom: 15px;
-        right: 15px;
-        font-size: 11px;
-        padding: 6px 12px;
-    }
-}
+@media (max-width: 768px) { 
+    .status-badge { 
+        top: auto; 
+        bottom: 570px; 
+        right: 15px; 
+        font-size: 11px; 
+        padding: 6px 12px; } }
 
 .dot {
     width: 8px;
@@ -824,8 +829,8 @@ body {
     background: linear-gradient(135deg, #1a4a7a, #2a5a8a);
     border: none;
     color: #fff;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 40px;
     border-radius: 50%;
     font-size: 20px;
     cursor: pointer;
@@ -927,6 +932,12 @@ body {
     overflow-y: auto;
     z-index: 100;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+    .action-btn[title="Emoji"] {
+        display: none !important;
+    }
 }
 
 .emoji-grid {
