@@ -1203,3 +1203,18 @@ async function resetPassword() {
         showError(errorDiv, error.message);
     }
 }
+
+
+
+function mobileKeyboardFix() {
+    if (window.innerWidth <= 768) {
+        setTimeout(() => {
+            document.activeElement?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }, 200);
+    }
+}
+
+document.getElementById("messageInput")?.addEventListener("focus", mobileKeyboardFix);

@@ -12,6 +12,7 @@ body {
     height: 100vh;
 }
 
+
 /* Auth Screen */
 .auth-screen {
     display: flex;
@@ -165,7 +166,7 @@ body {
 @media (max-width: 768px) { 
     .status-badge { 
         top: auto; 
-        bottom: 800px; 
+        bottom: 600px; 
         right: 15px; 
         font-size: 11px; 
         padding: 6px 12px; } }
@@ -1240,4 +1241,57 @@ body {
 
 .forgot-link:hover {
     text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+
+    .input-container{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 6px;
+        background: #0f1b34;
+        z-index: 999;
+        box-sizing: border-box;
+    }
+
+    .input-area{
+        width: 100%;
+        gap: 6px;
+    }
+
+    .input{
+        font-size: 14px;
+        padding: 12px;
+    }
+
+}
+
+
+
+@media (max-width: 768px) {
+
+    .input-container{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 6px;
+        background: #0f1b34;
+        z-index: 999;
+        box-sizing: border-box;
+    }
+
+    .input-area{
+        width: 100%;
+        gap: 6px;
+    }
+
+    .input{
+        font-size: 14px;
+        padding: 12px;
+    }
+
 }
